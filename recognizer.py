@@ -10,7 +10,7 @@ pygst.require('0.10')
 gobject.threads_init()
 import gst
 
-class recognizer(object):
+class SpeechRecognizer(object):
     """ GStreamer based speech recognizer. """
 
     def __init__(self):

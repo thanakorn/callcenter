@@ -1,0 +1,5 @@
+#JSGF V1.0;
+grammar CALLCENTER;
+public <callcenter> = <information_category>;
+
+<information_category> = PACKAGE | BILLING | PROBLEMS | SERVICE; 

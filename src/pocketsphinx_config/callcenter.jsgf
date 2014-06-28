@@ -1,6 +1,6 @@
 #JSGF V1.0;
 grammar callcenter;
-public <callcenter> = <question_category> | <package_questions>;
+public <callcenter> = <package_question> | <billing_question>;
 
 /* Info category */
 <question_category> = PACKAGE | BILLING | PROBLEM | SERVICE;

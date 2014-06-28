@@ -10,6 +10,8 @@ pygst.require('0.10')
 gobject.threads_init()
 import gst
 
+import os
+
 class SpeechRecognizer(object):
     """ GStreamer based speech recognizer. """
 
@@ -26,19 +28,11 @@ class SpeechRecognizer(object):
         asr.set_property('configured', True)
         asr.set_property('dsratio', 1)
 
-#        # parameters for lm and dic
-#        try:
-#            lm_ = rospy.get_param('~lm')
-#        except:
-#            print('Please specify a language model file')
-#            return
-#        try:
-#            dict_ = rospy.get_param('~dict')
-#        except:
-#            rospy.logerr('Please specify a dictionary')
-#            return
-#        asr.set_property('lm',lm_)
-#        asr.set_property('dict',dict_)
+        # parameters for grammar and dic
+        grammar = os.getcwd() + '/pocketsphinx_config/callcenter.fsg'
+        dic = os.getcwd() + '/pocketsphinx_config/callcenter.dic'
+        asr.set_property('fsg', grammar)
+        asr.set_property('dict', dic)
 
         bus = self.pipeline.get_bus()
         bus.add_signal_watch()
@@ -90,4 +84,4 @@ class SpeechRecognizer(object):
         print "Final: " + hyp
 
 if __name__=="__main__":
-    recognizer = recognizer()
+    recognizer = SpeechRecognizer()

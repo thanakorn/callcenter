@@ -9,15 +9,36 @@ import pygst
 pygst.require('0.10')
 gobject.threads_init()
 import gst
-
 import os
 
-class SpeechRecognizer(object):
+
+class Subject(object):
+
+    def __init__(self):
+        self._observers = []
+
+    def attach(self, observer):
+        if observer not in self._observers:
+            self._observers.append(observer)
+
+    def detach(self, observer):
+        try:
+            self._observers.remove(observer)
+        except ValueError:
+            pass
+
+    def notify(self):
+        for observer in self._observers:
+            observer.update()
+
+
+class SpeechRecognizer(Subject):
     """ GStreamer based speech recognizer. """
 
     def __init__(self):
         """ Initialize the speech pipeline components. """
         # configure pipeline
+        Subject.__init__(self)
         self.pipeline = gst.parse_launch('gconfaudiosrc ! audioconvert ! audioresample '
                                          + '! vader name=vad auto-threshold=true '
                                          + '! pocketsphinx name=asr ! fakesink')
@@ -82,6 +103,8 @@ class SpeechRecognizer(object):
     def final_result(self, hyp, uttid):
         """ Insert the final result. """
         print "Final: " + hyp
+        for observer in self._observers:
+            observer.update(hyp)
 
 if __name__=="__main__":
     recognizer = SpeechRecognizer()

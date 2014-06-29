@@ -39,6 +39,7 @@ class SpeechRecognizer(Subject):
         """ Initialize the speech pipeline components. """
         # configure pipeline
         Subject.__init__(self)
+        self.input = ''
         self.pipeline = gst.parse_launch('gconfaudiosrc ! audioconvert ! audioresample '
                                          + '! vader name=vad auto-threshold=true '
                                          + '! pocketsphinx name=asr ! fakesink')
@@ -58,8 +59,6 @@ class SpeechRecognizer(Subject):
         bus = self.pipeline.get_bus()
         bus.add_signal_watch()
         bus.connect('message::application', self.application_message)
-        self.start(None)
-        gtk.main()
 
     def shutdown(self):
         """ Shutdown the GTK thread. """
@@ -67,6 +66,7 @@ class SpeechRecognizer(Subject):
 
     def start(self, msg):
         self.pipeline.set_state(gst.STATE_PLAYING)
+        gtk.main()
 
     def stop(self):
         self.pipeline.set_state(gst.STATE_PAUSED)
@@ -98,13 +98,17 @@ class SpeechRecognizer(Subject):
 
     def partial_result(self, hyp, uttid):
         """ Delete any previous selection, insert text and select it. """
-        print "Partial: " + hyp
+        print('Partial: ' + hyp)
 
     def final_result(self, hyp, uttid):
         """ Insert the final result. """
-        print "Final: " + hyp
+        print('Final: ' + hyp)
+        self.input = hyp
         for observer in self._observers:
-            observer.update(hyp)
+            observer.update()
+
+    def get_final_result(self):
+        return self.input
 
 if __name__=="__main__":
     recognizer = SpeechRecognizer()

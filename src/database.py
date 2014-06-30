@@ -17,14 +17,23 @@ class DatabaseManager(object):
         self.bills = db['bills']
         self.accounts = db['accounts']
 
-    def findUserPackage(self, phone_number):
+    def find_user_info(self, phone_number):
+        """ Find customer information """
+        return self.customers.find_one({'phone_number': phone_number})
+
+    def find_user_package(self, phone_number):
         """ Find current user package """
-        customer = self.customers.find_one({'phone_number':phone_number})
+        customer = self.customers.find_one({'phone_number': phone_number})
+        if customer is None:
+            return 'Invalid phone number.'
+
         try:
-            bills = self.bills.find({'customer':customer['_id']}).sort('payment_date',-1)
+            bills = self.bills.find({'customer': customer['_id']}).sort('payment_date', -1)
             package_id = bills[0]['package']
-        except Exception:
-            account = self.accounts.find_one({'customer':customer['_id']})
+        except ValueError:
+            account = self.accounts.find_one({'customer': customer['_id']})
             package_id = account['package']
 
-        return self.packages.find_one({'_id':ObjectId(package_id)})
+        return self.packages.find_one({'_id': ObjectId(package_id)})
+
+

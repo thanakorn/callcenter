@@ -64,15 +64,15 @@ class SpeechRecognizer(Subject):
         """ Shutdown the GTK thread. """
         gtk.main_quit()
 
-    def start(self, msg):
+    def start(self):
         self.pipeline.set_state(gst.STATE_PLAYING)
         gtk.main()
 
     def stop(self):
         self.pipeline.set_state(gst.STATE_PAUSED)
-        #vader = self.pipeline.get_by_name('vad')
-        #vader.set_property('silent', True)
-        return EmptyResponse()
+
+    def resume(self):
+        self.pipeline.set_state(gst.STATE_PLAYING)
 
     def asr_partial_result(self, asr, text, uttid):
         """ Forward partial result signals on the bus to the main thread. """

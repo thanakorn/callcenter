@@ -1,35 +1,29 @@
 __author__ = 'thanakorn'
 
 import thread
-from subprocess import call
 from recognizer import SpeechRecognizer
 from database import DatabaseManager
-
-
-class Callcenter(object):
-
-    def __init__(self):
-        self.recognizer = None
-
-    def speak(self, text):
-        call(['espeak', text, '-s 150'])
-
-    def update(self):
-        self.recognizer.stop()
-        print('I heard  : ' + self.recognizer.get_final_result())
-        self.recognizer.resume()
+from callcenter import Callcenter
 
 if __name__ == '__main__':
-    print('... Start callcenter ...')
     phone_number = raw_input('Please input your phone number : ')
 
     # Init component
+    db = DatabaseManager()
     callcenter = Callcenter()
     recognizer = SpeechRecognizer()
     callcenter.recognizer = recognizer
     recognizer.attach(callcenter)
-    db = DatabaseManager()
 
-    # Start speech recognition
-    print('... Start recognizer ...')
-    thread.start_new_thread(recognizer.start())
+    # Retrieve customer information
+    customer = db.find_user_info(phone_number)
+    if customer:
+        # Greeting message
+        callcenter.greeting(customer)
+
+        # Start speech recognition thread
+        print('... Start recognizer ...')
+        thread.start_new_thread(recognizer.start())
+
+    else:
+        callcenter.speak('Sorry, we cannot find your phone number.')

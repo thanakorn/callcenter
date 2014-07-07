@@ -37,11 +37,16 @@ class ResponseGenerator(object):
         elif question.information in ['bill', 'money', 'balance', 'account']:
             # Get user's package
             package = self._db.find_user_package(customer['phone_number'])
-            if package['payment'] == 'postpaid':
-                if question.question == 'how much' and question.verb == 'pay':
-                    response = 'your service fee this month is %s baht.' % (package['fee'])
+            if question.question == 'how much':
+                if package['payment'] == 'postpaid':
+                    bill = self._db.find_latest_bill(customer)
+                    addition_calling_time = 0 if bill['calling_time'] <= package['calling_time'] else bill['calling_time'] - package['calling_time']
+                    service_fee = package['fee'] + (addition_calling_time * package['extra_calling_rate']) + (bill['sms'] * package['sms_rate'])
+                    response = 'your service fee this month is %d baht.' % (service_fee)
+                else:
+                    account = self._db.find_account(customer)
+                    response = 'your account balance is %d baht.' % (account['balance'])
                 return response
-            elif package['payment'] == 'prepaid':
-                if question.question == 'how much' or question.adjective == 'current':
-                    pass
+            else:
+                return 'sorry i do not understand your question'
 

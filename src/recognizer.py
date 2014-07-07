@@ -9,6 +9,7 @@ import pygst
 pygst.require('0.10')
 gobject.threads_init()
 import gst
+import time
 import os
 
 
@@ -103,12 +104,12 @@ class SpeechRecognizer(Subject):
     def final_result(self, hyp, uttid):
         """ Insert the final result. """
         print('Final: ' + hyp)
-        self.input = hyp
-        for observer in self._observers:
-            observer.update()
+        self.input = str(hyp.lower())
+        Subject.notify(self)
 
     def get_final_result(self):
         return self.input
 
-if __name__=="__main__":
+if __name__ == "__main__":
     recognizer = SpeechRecognizer()
+    recognizer.start()

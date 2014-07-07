@@ -24,6 +24,18 @@ class TestDatabaseManager(TestCase):
         dm = DatabaseManager()
         self.assertEqual(dm.find_user_package('0836990198')['name'], 'Smartphone more net 299')
 
+    def test_find_user_package(self):
+        dm = DatabaseManager()
+        self.assertEqual(dm.find_user_package('0879987123')['name'], 'Happy gang')
+
     def test_find_user_package_empty_input(self):
         dm = DatabaseManager()
         self.assertEqual(dm.find_user_package(''), 'Invalid phone number.')
+
+    def test_find_package_by_category_postpaid(self):
+        dm = DatabaseManager()
+        self.assertEqual(dm.find_package_by_category('calling and internet', 'postpaid').count(), 6)
+
+    def test_find_package_by_category_prepaid(self):
+        dm = DatabaseManager()
+        self.assertEqual(dm.find_package_by_category('calling and internet', 'prepaid').count(), 3)

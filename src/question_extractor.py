@@ -1,36 +1,41 @@
 __author__ = 'thanakorn'
 
-from src.question import Question
+from question import Question
 
 class QuestionExtractor(object):
 
     def __init__(self):
         self._questions = ['what', 'when', 'which', 'how much', 'how many', 'i want', 'i would like']
-        self._verbs = ['is', 'am', 'are', 'use', 'know', 'have', 'recommend', 'expire']
-        self._adjective = ['current', 'now', 'calling and internet', 'internet', 'calling']
-        self._information = ['package', 'bill', 'account', 'balance', 'money']
+        self._verbs = ['is', 'am', 'are', 'use', 'know', 'have', 'recommend', 'expire', 'pay']
+        self._adjectives = ['current', 'now', 'calling and internet', 'internet', 'calling']
+        self._informations = ['package', 'bill', 'account', 'balance', 'money']
 
     def extract(self, question):
 
-        words = question.split() # Split question into list of single words
-
         # Convert user's question to standard format
-        verb = None
+        # Find question word
         qw = None
+        for q in self._questions:
+            if q in question:
+                qw = q
+
+        # Find verb
+        verb = None
+        for v in self._verbs:
+            if v in question:
+                verb = v
+
+        # Find related information
         info = None
+        for inf in self._informations:
+            if inf in question:
+                info = inf
+
+        # Find adjective
         adj = None
-        for word in words:
-            # Find verb
-            if word in self._verbs:
-                verb = word
-            # Find question word
-            elif word in self._questions:
-                qw = word
-            # Find related information
-            elif word in self._information:
-                info = word
-            # Find adjective
-            elif word in self._adjective:
-                adj = word
+        for a in self._adjectives:
+            if a in question:
+                adj = a
+                break
 
         return Question(qw, verb, adj, info)

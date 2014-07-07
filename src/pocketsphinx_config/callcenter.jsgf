@@ -9,12 +9,13 @@ public <callcenter> = <package_questions> | <billing_questions>;
 
 /* Synonym */
 <want> = WANT | WOULD LIKE;
+<package> = PACKAGE | PROMOTION;
 <balance> = BALANCE | MONEY;
 
 /* Question */
 <package_questions> = <current_package> | <recommend_package>;
-<current_package> = WHAT IS MY [CURRENT] PACKAGE | WHICH PACKAGE I'M USING | I <want> TO KNOW MY [CURRENT] PACKAGE;
-<recommend_package> = [PLEASE] RECOMMEND ME <package_category> PACKAGE | WHAT <package_category> PACKAGE YOU HAVE | I <want> TO KNOW <package_category> PACKAGE;
+<current_package> = WHAT IS MY [CURRENT] <package> | WHICH <package> I'M USING | I <want> TO KNOW MY [CURRENT] <package>;
+<recommend_package> = [PLEASE] RECOMMEND ME <package_category> <package> | WHAT <package_category> <package> YOU HAVE | I <want> TO KNOW <package_category> <package>;
 <billing_questions> = <prepaid_questions> | <postpaid_questions>;
 <prepaid_questions> = HOW MUCH <balance> (MY ACCOUNT HAVE | LEFT IN MY ACCOUNT) | I <want> TO KNOW MY CURRENT <balance> | WHEN MY ACCOUNT EXPIRE;
-<postpaid_questions> = HOW MUCH [MONEY] I HAVE TO PAY THIS MONTH | HOW MANY BILLS ARE UNPAID;
+<postpaid_questions> = HOW MUCH MONEY I HAVE TO PAY THIS MONTH | HOW MANY BILLS ARE UNPAID;

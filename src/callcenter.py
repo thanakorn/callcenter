@@ -5,7 +5,8 @@ from subprocess import call
 from question import Question
 from question_extractor import QuestionExtractor
 from response_generator import ResponseGenerator
-
+from voice import speak
+import time
 
 class Callcenter(object):
 
@@ -20,7 +21,20 @@ class Callcenter(object):
 
     @staticmethod
     def speak(text):
-        call(['espeak', text, '-s 120'])
+        text = text.split('.')
+        for t in text:
+            if len(t) > 0:
+                print('phrase : ' + t)
+                speak(t)
+                time.sleep(3)
+            #if len(speak_text) + len(t) < 100:
+            #    speak_text += (t + ' ')
+            #else:
+            #    speak(speak_text)
+            #    speak_text = t
+            #    time.sleep(10)
+        #speak(speak_text)
+        #call(['espeak', text, '-s 120'])
 
     def update(self):
         self.recognizer.stop()

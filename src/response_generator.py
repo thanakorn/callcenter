@@ -10,7 +10,8 @@ class ResponseGenerator(object):
         self._db = DatabaseManager()
 
     def generate_response_message(self, question, customer):
-        if question.information == 'package':
+
+        if question.information in ['package', 'promotion']:
             package = self._db.find_user_package(customer['phone_number'])
             # Recommend package
             if question.verb in ['know', 'recommend', 'have'] and question.adjective in ['internet', 'calling', 'calling and internet']:
@@ -19,9 +20,9 @@ class ResponseGenerator(object):
                 for p in recommend_packages:
                     response += '%s. ' % (p['name'])
                     if package['payment'] == 'postpaid':
-                        response += 'maximum calling time is %d minutes, maximum speed internet data is %d gigabytes and monthly fee is %d baht. ' % (p['calling_time'], p['max_speed_data'], p['fee'])
+                        response += 'maximum calling time is %d minutes. maximum speed internet data is %d gigabytes and monthly fee is %d baht. ' % (p['calling_time'], p['max_speed_data'], p['fee'])
                     elif package['payment'] == 'prepaid':
-                        response += 'internal calling rate is %.2f baht per minute, external calling rate is %.2f baht per minute, and registration fee is %d baht. ' % (p['internal_calling_rate'], p['external_calling_rate'], p['registration_fee'])
+                        response += 'internal calling rate is %.2f baht per minute. external calling rate is %.2f baht per minute. and registration fee is %d baht. ' % (p['internal_calling_rate'], p['external_calling_rate'], p['registration_fee'])
                 return response
             # Ask for current package
             elif question.question in ['what', 'which'] and (question.adjective is None or question.adjective == 'current'):

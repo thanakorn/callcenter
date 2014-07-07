@@ -8,7 +8,7 @@ class QuestionExtractor(object):
         self._questions = ['what', 'when', 'which', 'how much', 'how many', 'i want', 'i would like']
         self._verbs = ['is', 'am', 'are', 'use', 'know', 'have', 'recommend', 'expire', 'pay']
         self._adjectives = ['current', 'now', 'calling and internet', 'internet', 'calling']
-        self._informations = ['package', 'bill', 'account', 'balance', 'money']
+        self._informations = ['package', 'promotion', 'bill', 'account', 'balance', 'money']
 
     def extract(self, question):
 
